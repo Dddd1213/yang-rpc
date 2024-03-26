@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author daichenyang <daichenyang@kuaishou.com>
  * Created on 2024-03-25
  */
-@Slf4j
 public class HttpServerHandler implements Handler<HttpServerRequest> {
 
     /**
@@ -27,38 +26,37 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
      * @param req
      */
     public void handle(HttpServerRequest req) {
-        log.info("Received request: "+req.method()+" "+req.uri());
+        System.out.println("Received request: "+req.method()+" "+req.uri());
         RpcResponse rpcResponse = new RpcResponse();
 
         //反序列化
-        final RpcRequest[] rpcRequest = {null};
         final JdkSerializer jdkSerializer = new JdkSerializer();
-        req.bodyHandler(new Handler<Buffer>() {
-            public void handle(Buffer buffer) {
-                byte[] bytes = buffer.getBytes();
-                try {
-                    rpcRequest[0] = jdkSerializer.deserialize(bytes, RpcRequest.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    rpcResponse.setMessage(e.getMessage());
-                    rpcResponse.setException(e);
-                    doResponse(req,rpcResponse,jdkSerializer);
-                }
+        //注意：这一大段都要写在handler里面！！！
+        req.bodyHandler(buffer -> {
+            System.out.println("进入handle");
+            RpcRequest rpcRequest = null;
+            byte[] bytes = buffer.getBytes();
+            try {
+                rpcRequest = jdkSerializer.deserialize(bytes, RpcRequest.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+                rpcResponse.setMessage(e.getMessage());
+                rpcResponse.setException(e);
+                doResponse(req,rpcResponse,jdkSerializer);
             }
-        });
 
         //如果请求为null，直接返回
-        if(rpcRequest[0] ==null){
+        if(rpcRequest ==null){
            rpcResponse.setMessage("rpcRequest is null");
            doResponse(req,rpcResponse,jdkSerializer);
        }
         //如果请求不为null，则进行反射调用
         try {
-            Class<?> implClass = LocalRegistry.get(rpcRequest[0].getServiceName());
-            Method method = implClass.getMethod(rpcRequest[0].getMethodName(),rpcRequest[0].getArgTypes());
+            Class<?> implClass = LocalRegistry.get(rpcRequest.getServiceName());
+            Method method = implClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getArgTypes());
             //正常来说，这里什么实例，调用什么方法都是写死的
             //这里相当于，通过传递进来的类名，方法名，参数等等信息，从注册中心获取到对应的类，动态地执行对应的方法（感觉很像动态代理的思想）
-            Object result = method.invoke(implClass.newInstance(), rpcRequest[0].getArgs());
+            Object result = method.invoke(implClass.newInstance(), rpcRequest.getArgs());
 
             rpcResponse.setResult(result);
             rpcResponse.setResultType(method.getReturnType());
@@ -69,6 +67,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
             rpcResponse.setException(e);
         }
         doResponse(req,rpcResponse,jdkSerializer);
+        });
     }
 
     private void doResponse(HttpServerRequest req,RpcResponse rpcResponse, Serializer serializer) {
