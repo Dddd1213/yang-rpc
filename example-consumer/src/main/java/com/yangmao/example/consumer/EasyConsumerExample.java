@@ -20,5 +20,6 @@ public class EasyConsumerExample {
         }else{
             System.out.println("newUser is null");
         }
+//        System.out.println(userService.getNumber());
     }
 }

@@ -1,5 +1,7 @@
 package com.yangmao.yangrpc.utils;
 
+import com.yangmao.yangrpc.config.RpcConfig;
+
 import cn.hutool.setting.dialect.Props;
 
 /**

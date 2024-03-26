@@ -19,7 +19,6 @@ import cn.hutool.http.HttpResponse;
 public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println("进入invoke方法");
         Serializer serializer = new JdkSerializer();
         RpcRequest rpcRequest = RpcRequest.builder()
                 .serviceName(method.getDeclaringClass().getName())
