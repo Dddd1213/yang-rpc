@@ -1,0 +1,7 @@
+
+m	java:S106"+Replace this use of System.out by a logger.(€Ÿëì8È¶™Îç1J$6579d38a-d3be-4159-825b-3ce2114235ff
+r	java:S106$"+Replace this use of System.out by a logger.(ë×–Âýÿÿÿÿ8Ê¶™Îç1J$c819c8a0-4076-4861-8203-20f42d1f96d9
+v
+java:S1874;"3Remove this use of "newInstance"; it is deprecated.(¨òÏ¶8Ì¶™Îç1J$f888d039-711d-4799-8272-4b614a222697
+y
+java:S1128"6Remove this unused import 'lombok.extern.slf4j.Slf4j'.(ûúÄ®8Î¶™Îç1J$f34e4ca7-085f-4348-a297-29b1f55ef97a

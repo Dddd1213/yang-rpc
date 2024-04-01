@@ -3,10 +3,13 @@ package com.yangmao.yangrpc.server;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import com.yangmao.yangrpc.RpcApplication;
+import com.yangmao.yangrpc.config.RpcConfig;
 import com.yangmao.yangrpc.model.RpcRequest;
 import com.yangmao.yangrpc.model.RpcResponse;
 import com.yangmao.yangrpc.registry.LocalRegistry;
 import com.yangmao.yangrpc.serializer.Serializer;
+import com.yangmao.yangrpc.serializer.SerializerFactory;
 import com.yangmao.yangrpc.serializer.impl.JdkSerializer;
 
 import io.vertx.core.Handler;
@@ -30,7 +33,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
         RpcResponse rpcResponse = new RpcResponse();
 
         //反序列化
-        final JdkSerializer jdkSerializer = new JdkSerializer();
+        Serializer jdkSerializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerialization());
         //注意：这一大段都要写在handler里面！！！
         req.bodyHandler(buffer -> {
             System.out.println("进入handle");

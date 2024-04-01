@@ -20,6 +20,7 @@ public class ConfigUtils {
         }
         configFileBuilder.append(".properties");
         Props props = new Props(configFileBuilder.toString());
+        props.autoLoad(true);
         return props.toBean(tClass,prefix);
     }
 

@@ -1,6 +1,7 @@
 package com.yangmao.example.provider;
 
 import com.yangmao.example.common.service.UserService;
+import com.yangmao.yangrpc.RpcApplication;
 import com.yangmao.yangrpc.registry.LocalRegistry;
 import com.yangmao.yangrpc.server.VertxHttpServer;
 
@@ -10,8 +11,11 @@ import com.yangmao.yangrpc.server.VertxHttpServer;
  */
 public class EasyProviderExample {
     public static void main(String[] args) {
+
+        RpcApplication.init();
+
         LocalRegistry.register(UserService.class.getName(), UserServiceImpl.class);
         VertxHttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(8090);
+        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
     }
 }

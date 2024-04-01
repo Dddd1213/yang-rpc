@@ -1,0 +1,2 @@
+jdk=com.yangmao.yangrpc.serializer.JdkSerializer
+json=com.yangmao.yangrpc.serializer.JsonSerializer

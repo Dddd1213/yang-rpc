@@ -7,10 +7,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="yang-rpc-easy" />
+        <module name="yang-rpc-core" />
         <module name="example-provider" />
         <module name="example-common" />
         <module name="example-consumer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="11">
+      <module name="yang-rpc-easy (1)" target="11" />
+      <module name="yang-rpc-easy (2)" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

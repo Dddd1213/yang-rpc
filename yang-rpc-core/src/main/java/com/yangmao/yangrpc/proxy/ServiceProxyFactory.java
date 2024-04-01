@@ -2,6 +2,7 @@ package com.yangmao.yangrpc.proxy;
 
 import java.lang.reflect.Proxy;
 
+import com.yangmao.yangrpc.RpcApplication;
 import com.yangmao.yangrpc.config.RpcConfig;
 import com.yangmao.yangrpc.utils.ConfigUtils;
 
@@ -19,7 +20,7 @@ public class ServiceProxyFactory {
      */
     public static <T> T getProxy(Class<T> serviceClass){
 
-        if(RpcConfig.getRpcConfig().getMock()){
+        if(RpcApplication.getRpcConfig().getMock()){
             return  (T) Proxy.newProxyInstance(
                     serviceClass.getClassLoader(),
                     new Class[]{serviceClass},

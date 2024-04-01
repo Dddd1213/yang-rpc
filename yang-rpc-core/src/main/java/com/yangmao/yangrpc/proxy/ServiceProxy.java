@@ -3,10 +3,12 @@ package com.yangmao.yangrpc.proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import com.yangmao.yangrpc.RpcApplication;
+import com.yangmao.yangrpc.config.RpcConfig;
 import com.yangmao.yangrpc.model.RpcRequest;
 import com.yangmao.yangrpc.model.RpcResponse;
 import com.yangmao.yangrpc.serializer.Serializer;
-import com.yangmao.yangrpc.serializer.impl.JdkSerializer;
+import com.yangmao.yangrpc.serializer.SerializerFactory;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -19,7 +21,7 @@ import cn.hutool.http.HttpResponse;
 public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Serializer serializer = new JdkSerializer();
+        Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerialization());
         RpcRequest rpcRequest = RpcRequest.builder()
                 .serviceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
